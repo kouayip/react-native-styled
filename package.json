@@ -1,0 +1,40 @@
+{
+  "name": "styled",
+  "version": "1.0.0",
+  "description": "A React Native component styled",
+  "types": "lib/index.d.ts",
+  "main": "lib/index.js",
+  "scripts": {
+    "prebuild": "rm -rf lib",
+    "build": "tsc -p tsconfig.json",
+    "pre": "rm -rf lib && tsc && npm version patch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kouayip/react-native-styled.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kouayip/react-native-styled/issues"
+  },
+  "homepage": "https://github.com/kouayip/react-native-styled#readme",
+  "author": "Yves Kouayip <kamwayves37@gmail.com>",
+  "license": "MIT",
+  "files": [],
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.178",
+    "@types/react": "^17",
+    "@types/react-native": "^0.66.4",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "eslint": "^7.14.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.4.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}

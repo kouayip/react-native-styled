@@ -1,0 +1,7 @@
+/build
+/lib
+/styled.iml
+/.idea/
+/node_modules/
+.expo
+.DS_Store
