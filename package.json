@@ -2,7 +2,7 @@
   "name": "styled",
   "version": "1.0.0",
   "description": "A React Native component styled",
-  "types": "lib/index.d.ts",
+  "types": "lib",
   "main": "lib/index.js",
   "scripts": {
     "prebuild": "rm -rf lib",
