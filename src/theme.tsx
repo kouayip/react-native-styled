@@ -7,13 +7,11 @@ export type ThemeColors = 'light' | 'dark';
 export interface ThemeContextProps {
   mode: ThemeColors;
   theme: Theme;
-  toggleMode: () => void;
 }
 
 export const ThemeContext = React.createContext<ThemeContextProps>({
   mode: 'light',
   theme: {} as Theme,
-  toggleMode: () => {},
 });
 
 export const getThemeContext = (): ThemeContextProps =>
@@ -25,29 +23,53 @@ export const useAppearance = (): Theme => {
 };
 
 export interface ThemeProviderProps {
-  theme: ThemeColors;
+  mode: ThemeColors;
+  theme: Theme;
+}
+
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({
+  mode,
+  theme,
+  children,
+}) => {
+  const provider: ThemeContextProps = {
+    mode,
+    theme,
+  };
+
+  return (
+    <ThemeContext.Provider value={provider}>{children}</ThemeContext.Provider>
+  );
+};
+
+export interface LayoutContainerProps {
+  mode: ThemeColors;
   setTheme: (theme: ThemeColors) => void;
 }
 
-export interface ThemeProviderRenderProps {
-  render?: (props: ThemeProviderProps) => React.ReactElement;
-  children?: (props: ThemeProviderProps) => React.ReactElement;
+export interface LayoutContainerRenderProps {
+  defaultTheme?: ThemeColors;
+  render?: (props: LayoutContainerProps) => React.ReactElement;
+  children?: (props: LayoutContainerProps) => React.ReactElement;
 }
 
-export const ThemeProvider: React.FC<ThemeProviderRenderProps> = ({
+export const LayoutContainer: React.FC<LayoutContainerRenderProps> = ({
+  defaultTheme,
   render,
   children,
 }) => {
-  const [theme, setColorTheme] = React.useState<ThemeColors>('light');
+  const [mode, setColorTheme] = React.useState<ThemeColors>(
+    defaultTheme ?? 'light',
+  );
 
   const setTheme = (color: ThemeColors) => setColorTheme(color);
 
   if (render) {
-    return render({theme, setTheme});
+    return render({mode, setTheme});
   }
 
   if (children) {
-    return children({theme, setTheme});
+    return children({mode, setTheme});
   }
 
   return null;
