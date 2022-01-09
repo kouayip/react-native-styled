@@ -1,9 +1,46 @@
 import * as React from 'react';
-import {Text, TextStyle} from 'react-native';
-import {CustomTextProps, CustomTextStyle} from './types';
-import {buildCustomStyle, useDeepEffect} from './utils';
+import {Text, TextProps, TextStyle} from 'react-native';
+import {useDeepEffect} from './utils';
+import {getThemeContext, Theme} from './theme';
 
 export * from './theme';
+
+type PropertyParams = {
+  theme: Theme;
+};
+
+type PropertyFunction<T, V> = (props: T & PropertyParams) => V;
+
+type CustomType<T, P> = {
+  [K in keyof T]?: T[K] | PropertyFunction<P, T[K]>;
+};
+
+type CustomTextStyle<T> = CustomType<TextStyle, T>;
+type CustomTextProps<T> = TextProps & T;
+
+type CustomStyle<T> = CustomTextStyle<T>;
+
+function buildCustomStyle<T>(styles: CustomStyle<T>, props: T): TextStyle {
+  const {theme} = getThemeContext();
+  const newStyle = {} as any;
+
+  for (const [key, value] of Object.entries(styles)) {
+    if (typeof value === 'function') {
+      try {
+        newStyle[key] = value({
+          ...props,
+          theme,
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    } else {
+      newStyle[key] = value;
+    }
+  }
+
+  return newStyle;
+}
 
 const text =
   <T extends object = {}>(
