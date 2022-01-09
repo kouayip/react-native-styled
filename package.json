@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A React Native component styled",
   "types": "lib",
-  "main": "lib/index.js",
+  "main": "lib",
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "tsc -p tsconfig.json",
