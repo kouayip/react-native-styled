@@ -20,8 +20,12 @@ type CustomTextProps<T> = TextProps & T;
 
 type CustomStyle<T> = CustomTextStyle<T>;
 
-function buildCustomStyle<T>(styles: CustomStyle<T>, props: T): TextStyle {
-  const {theme} = getThemeContext();
+function buildCustomStyle<T>(
+  styles: CustomStyle<T>,
+  props: T,
+  theme: Theme,
+): TextStyle {
+  console.log('theme');
   const newStyle = {} as any;
 
   for (const [key, value] of Object.entries(styles)) {
@@ -89,9 +93,10 @@ const text =
     ...props
   }: React.PropsWithChildren<CustomTextProps<T>>) => {
     const [customStyle, setCustomStyle] = React.useState<TextStyle>({});
+    const {theme} = getThemeContext();
 
     useDeepEffect(async () => {
-      const newStyle = buildCustomStyle<T>(styles, props as T);
+      const newStyle = buildCustomStyle<T>(styles, props as T, theme);
       setCustomStyle(newStyle);
     }, [props]);
 
