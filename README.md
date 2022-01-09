@@ -1,17 +1,17 @@
-# Picache
+# React Native Component Styled
 
 A React Native component styled.
 
 ## Usage
 
 ```bash
-yarn add styled
+npm i react-native-component-styled
 ```
 
-Use Picache the same way you would use an `<Image />` component.
+Use Styled to create and style your react native component.
 
 ```tsx
-import styled from "styled";
+import styled from "react-native-component-styled";
 
 const App = () => (
     <View>
