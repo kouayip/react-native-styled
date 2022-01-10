@@ -48,18 +48,18 @@ export interface LayoutContainerProps {
 }
 
 export interface LayoutContainerRenderProps {
-  defaultTheme?: ThemeColors;
+  defaultMode?: ThemeColors;
   render?: (props: LayoutContainerProps) => React.ReactElement;
   children?: (props: LayoutContainerProps) => React.ReactElement;
 }
 
 export const LayoutContainer: React.FC<LayoutContainerRenderProps> = ({
-  defaultTheme,
+  defaultMode,
   render,
   children,
 }) => {
   const [mode, setColorTheme] = React.useState<ThemeColors>(
-    defaultTheme ?? 'light',
+    defaultMode ?? 'light',
   );
 
   const setTheme = (color: ThemeColors) => setColorTheme(color);
