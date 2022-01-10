@@ -25,7 +25,6 @@ function buildCustomStyle<T>(
   props: T,
   theme: Theme,
 ): TextStyle {
-  console.log('theme');
   const newStyle = {} as any;
 
   for (const [key, value] of Object.entries(styles)) {
@@ -92,14 +91,27 @@ const text =
     suppressHighlighting,
     ...props
   }: React.PropsWithChildren<CustomTextProps<T>>) => {
+    const isFirst = React.useRef(true);
+    const prevProps = React.useRef(props);
+
     const [customStyle, setCustomStyle] = React.useState<TextStyle>({});
     const {theme} = getThemeContext();
 
     React.useEffect(() => {
-      const newStyle = buildCustomStyle<T>(styles, props as T, theme);
-      if (!isEqual(newStyle, customStyle)) {
-        setCustomStyle(newStyle);
+      if (!__DEV__) {
+        if (isFirst.current || !isEqual(prevProps.current, props)) {
+          const newStyle = buildCustomStyle<T>(styles, props as T, theme);
+          setCustomStyle(newStyle);
+        }
+      } else {
+        const newStyle = buildCustomStyle<T>(styles, props as T, theme);
+        if (!isEqual(newStyle, customStyle)) {
+          setCustomStyle(newStyle);
+        }
       }
+
+      isFirst.current = false;
+      prevProps.current = props;
     }, [customStyle, props, theme]);
 
     return (
