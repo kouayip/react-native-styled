@@ -7,7 +7,7 @@
   "scripts": {
     "prebuild": "rm -rf lib",
     "build": "tsc -p tsconfig.json",
-    "pre": "rm -rf lib && tsc && npm version patch"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,9 @@
   "homepage": "https://github.com/kouayip/react-native-styled#readme",
   "author": "Yves Kouayip <kamwayves37@gmail.com>",
   "license": "MIT",
-  "files": [],
+  "files": [
+    "lib"
+  ],
   "dependencies": {
     "lodash": "^4.17.21"
   },
