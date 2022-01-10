@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Text, TextProps, TextStyle} from 'react-native';
-import {useDeepEffect} from './utils';
 import {getThemeContext, Theme} from './theme';
+import {isEqual} from 'lodash';
 
 export * from './theme';
 
@@ -95,10 +95,12 @@ const text =
     const [customStyle, setCustomStyle] = React.useState<TextStyle>({});
     const {theme} = getThemeContext();
 
-    useDeepEffect(async () => {
+    React.useEffect(() => {
       const newStyle = buildCustomStyle<T>(styles, props as T, theme);
-      setCustomStyle(newStyle);
-    }, [props]);
+      if (!isEqual(newStyle, customStyle)) {
+        setCustomStyle(newStyle);
+      }
+    }, [customStyle, props, theme]);
 
     return (
       <Text
