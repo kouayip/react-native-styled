@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-export interface Theme {}
+export interface Theme {
+  [key: string]: any;
+}
 
 export type ThemeColors = 'light' | 'dark';
 

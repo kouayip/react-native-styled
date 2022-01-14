@@ -1,12 +1,16 @@
 import * as React from 'react';
 import * as reactNative from 'react-native';
 
-import {CustomStyle, DefaultBuilder} from './types';
+import {CustomStyle, DefaultBuilder, StyledFunction} from './types';
 import createStyleBuilder from './builder';
 import styled from './styled';
 
-function styledComponent<P, S>(Tag: React.ComponentType<any>) {
-  return <T extends {}>(style?: CustomStyle<S, T>) => {
+export * from './theme';
+
+function styledComponent<P, S>(
+  Tag: React.ComponentType<any>,
+): StyledFunction<P, S> {
+  return <T extends Object>(style?: CustomStyle<S, T>) => {
     const baseStyle = {} as any;
     const funcKeys: Array<keyof S> = [];
 

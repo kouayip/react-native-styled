@@ -1,6 +1,6 @@
 {
   "name": "react-native-component-styled",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "description": "A React Native component styled",
   "types": "lib",
   "main": "lib",
@@ -22,6 +22,7 @@
   "files": [
     "lib"
   ],
+  "keywords": ["react", "react native", "style", "styled","mobile", "android", "appel", "ios"],
   "dependencies": {},
   "devDependencies": {
     "@types/lodash": "^4.14.178",
