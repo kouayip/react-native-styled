@@ -14,9 +14,9 @@ export type CustomStyle<S, P> = {
 
 export type StyledComponent<T> = FC<PropsWithChildren<T>>;
 
-export type StyledFunction<P, S> = <T extends Object>(
-  style?: CustomStyle<S, T> | undefined,
-) => StyledComponent<P & T>;
+export type StyledFunction<P, S> = <Props extends object = {}>(
+  style?: CustomStyle<S, Props> | undefined,
+) => StyledComponent<P & Props>;
 
 export type BaseProps<P> = {
   style?: StyleProp<P> | undefined;

@@ -10,7 +10,7 @@ export * from './theme';
 function styledComponent<P, S>(
   Tag: React.ComponentType<any>,
 ): StyledFunction<P, S> {
-  return <T extends Object>(style?: CustomStyle<S, T>) => {
+  return <Props extends object = {}>(style?: CustomStyle<S, Props>) => {
     const baseStyle = {} as any;
     const funcKeys: Array<keyof S> = [];
 
@@ -25,10 +25,10 @@ function styledComponent<P, S>(
         }
       }
 
-      styleBuilder = createStyleBuilder<P & T, S>(style, funcKeys);
+      styleBuilder = createStyleBuilder<P & Props, S>(style, funcKeys);
     }
 
-    return styled<P & T, S>(Tag, baseStyle, styleBuilder);
+    return styled<P & Props, S>(Tag, baseStyle, styleBuilder);
   };
 }
 
