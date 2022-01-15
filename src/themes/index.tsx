@@ -13,7 +13,7 @@ export interface ThemeContextProps {
 
 export const ThemeContext = React.createContext<ThemeContextProps>({
   mode: 'light',
-  theme: {} as Theme,
+  theme: {},
 });
 
 export const getThemeContext = (): ThemeContextProps =>

@@ -1,36 +1,23 @@
 import * as React from 'react';
-import {BaseProps, StyleBuilder, StyledComponent} from './types';
-import {getThemeContext, ThemeColors} from './theme';
+import {
+  BaseProps,
+  CustomStyle,
+  DefaultBuilder,
+  StyleBuilder,
+  StyledComponent,
+  StyledFunction,
+} from './types';
+import {getThemeContext} from './themes';
+import {filterStylePropDeps} from './utils';
+import createStyleBuilder from './builder';
 
-function filterStylePropDeps(props: any, mode: ThemeColors): Array<any> {
-  const deps = [];
-
-  // Add theme color dependence
-  deps.push(mode);
-
-  // Filter other props dependencies
-  for (const propsKey in props) {
-    if (props.hasOwnProperty(propsKey)) {
-      const value = props[propsKey];
-      if (typeof value !== 'undefined' || value !== null) {
-        if (typeof value === 'object' || typeof value === 'function') {
-          continue;
-        }
-        deps.push(value);
-      }
-    }
-  }
-
-  return deps;
-}
-
-export function styled<P extends BaseProps<S>, S>(
+function styled<T, P extends BaseProps<S>, S>(
   Component: React.ComponentType<any>,
   style: S,
   builder: StyleBuilder<P, S>,
   isDynamicStyle: boolean,
-): StyledComponent<P> {
-  return ({children, style: nStyle, ...props}) => {
+): StyledComponent<P, T> {
+  return ({children, ref, key, style: nStyle, ...props}) => {
     const {theme, mode} = getThemeContext();
     let memoizedStyle = {};
 
@@ -42,13 +29,57 @@ export function styled<P extends BaseProps<S>, S>(
 
     if (children) {
       return (
-        <Component {...props} style={[style, memoizedStyle, nStyle]}>
+        <Component
+          ref={ref}
+          key={key}
+          {...props}
+          style={[style, memoizedStyle, nStyle]}>
           {children}
         </Component>
       );
     } else {
-      return <Component {...props} style={[style, memoizedStyle, nStyle]} />;
+      return (
+        <Component
+          ref={ref}
+          key={key}
+          {...props}
+          style={[style, memoizedStyle, nStyle]}
+        />
+      );
     }
   };
 }
-export default styled;
+
+export function styledComponent<T, P, S>(
+  Tag: React.ComponentType<any>,
+): StyledFunction<T, P, S> {
+  return <Props extends object = {}>(style?: CustomStyle<S, Props>) => {
+    const baseStyle = {} as any;
+    const funcKeys: Array<keyof S> = [];
+
+    let styleBuilder = DefaultBuilder;
+
+    if (style) {
+      for (const [key, value] of Object.entries(style)) {
+        if (typeof value === 'function') {
+          funcKeys.push(key as keyof S);
+        } else {
+          baseStyle[key] = value;
+        }
+      }
+
+      if (funcKeys.length) {
+        styleBuilder = createStyleBuilder<P & Props, S>(style, funcKeys);
+      }
+    }
+
+    return styled<T, P & Props, S>(
+      Tag,
+      baseStyle,
+      styleBuilder,
+      funcKeys.length > 0,
+    );
+  };
+}
+
+export default styledComponent;

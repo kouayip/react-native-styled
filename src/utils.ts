@@ -1,55 +1,28 @@
-import * as React from 'react';
-import * as _ from 'lodash';
+import {ThemeColors} from './themes';
 
-export function useDeepEffect(callback: () => void, deps: Array<any> = []) {
-  const isFirst = React.useRef(true);
-  const prevDeps = React.useRef(deps);
+export function filterStylePropDeps(props: any, mode: ThemeColors): Array<any> {
+  const deps = [];
 
-  React.useEffect(() => {
-    const isSame = prevDeps.current.every((obj, index) =>
-      _.isEqual(obj, deps[index]),
-    );
+  // Add theme color dependence
+  deps.push(mode);
 
-    if (isFirst.current || !isSame) {
-      callback();
-    }
-
-    isFirst.current = false;
-    prevDeps.current = deps;
-  }, [callback, deps]);
-}
-
-export function objectEquals(value: any, other: any) {
-  for (const p in value) {
-    if (value.hasOwnProperty(p)) {
-      if (typeof value[p] !== typeof other[p]) {
-        return false;
-      }
-      if ((value[p] === null) !== (other[p] === null)) {
-        return false;
-      }
-      switch (typeof value[p]) {
-        case 'undefined':
-          if (typeof other[p] !== 'undefined') {
-            return false;
-          }
-          break;
-        case 'object':
-        case 'function':
+  // Filter other props dependencies
+  for (const propsKey in props) {
+    if (props.hasOwnProperty(propsKey)) {
+      const value = props[propsKey];
+      if (typeof value !== 'undefined' || value !== null) {
+        if (typeof value === 'object' || typeof value === 'function') {
           continue;
-        default:
-          if (value[p] !== other[p]) {
-            return false;
-          }
+        }
+
+        deps.push(value);
       }
-    } else {
-      return false;
     }
   }
-  return true;
+
+  return deps;
 }
 
 export default {
-  useDeepEffect,
-  objectEquals,
+  filterStylePropDeps,
 };

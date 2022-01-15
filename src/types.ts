@@ -1,5 +1,5 @@
-import {FC, PropsWithChildren} from 'react';
-import {Theme} from './theme';
+import {FC, PropsWithChildren, ClassAttributes} from 'react';
+import {Theme} from './themes';
 import {StyleProp} from 'react-native';
 
 export type PropertyParams = {
@@ -12,14 +12,16 @@ export type CustomStyle<S, P> = {
   [K in keyof S]?: S[K] | StyleFunction<P, S[K]>;
 };
 
-export type StyledComponent<T> = FC<PropsWithChildren<T>>;
+export type StyledComponent<P, T> = FC<
+  PropsWithChildren<P> & ClassAttributes<T>
+>;
 
-export type StyledFunction<P, S> = <Props extends object = {}>(
+export type StyledFunction<T, P, S> = <Props extends object = {}>(
   style?: CustomStyle<S, Props> | undefined,
-) => StyledComponent<P & Props>;
+) => StyledComponent<P & Props, T>;
 
-export type BaseProps<P> = {
-  style?: StyleProp<P> | undefined;
+export type BaseProps<S> = {
+  style?: StyleProp<S> | undefined;
   [key: string]: any;
 };
 
