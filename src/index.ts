@@ -24,11 +24,17 @@ function styledComponent<P, S>(
           baseStyle[key] = value;
         }
       }
-
-      styleBuilder = createStyleBuilder<P & Props, S>(style, funcKeys);
+      if (funcKeys.length) {
+        styleBuilder = createStyleBuilder<P & Props, S>(style, funcKeys);
+      }
     }
 
-    return styled<P & Props, S>(Tag, baseStyle, styleBuilder);
+    return styled<P & Props, S>(
+      Tag,
+      baseStyle,
+      styleBuilder,
+      funcKeys.length > 0,
+    );
   };
 }
 
